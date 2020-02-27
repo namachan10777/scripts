@@ -4,11 +4,13 @@
 	"additional_envs": {
 		"XDG_CONFIG_HOME": {
 			"value": "~/.config",
-			"overwrite": false
+			"type": "overwrite",
+			"resolve": true
 		},
 		"GOPATH": {
 			"value": "~/.local/share/go",
-			"overwrite": false
+			"type": "overwrite",
+			"resolve": true
 		}
 	}
 }
