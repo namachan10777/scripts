@@ -2,15 +2,16 @@
 
 import argparse
 import json
+from pathlib import Path
 
-def parse_cfg(cfg):
-    return json.loads(cfg.read())
+def get_root_of_cfg(cfg_file):
+    return Path(cfg_file.name).expanduser().resolve().parent
 
-def check(cfg):
-    print('check')
+def check(cfg_file):
+    print(get_root_of_cfg(cfg_file))
 
-def deploy(cfg):
-    print('deploy')
+def deploy(cfg_file):
+    print(get_root_of_cfg(cfg_file))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
