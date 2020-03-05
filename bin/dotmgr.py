@@ -17,30 +17,29 @@ def get_root_of_cfg(cfg_file_path_string):
 def parse_cfg_file(cfg_file):
     return json.loads(cfg_file.read())
 
-def configure_envs(cfg):
-    for env_name in cfg['additional_envs'].keys():
-        env = cfg['additional_envs'][env_name]
-        value = env['value']
-
-        if env['resolve']:
-            value = str(Path(value).expanduser().resolve())
-
-        if env_name not in os.environ or env['type'] == 'overwrite':
-            os.environ[env_name] = value
-        elif env['type'] == 'append':
-            os.environ[env_name] = os.environ[env_name] + ':' + value
-
 class Config:
     def __init__(self, cfg_file_path):
         path_normalized = normalize_path(cfg_file_path)
         try:
             f = open(path_normalized, 'r')
-            cfg_json = json.loads(f.read())
+            self.cfg = json.loads(f.read())
         except FileNotFoundError as e:
             raise DotMgrError(f'File Not found {cfg_file_path}')
         except json.decoder.JSONDecodeError as e:
             raise DotMgrError(f'{cfg_file_path} is not a JSON')
 
+    def configure_envs(self):
+        for env_name in self.cfg['additional_envs'].keys():
+            env = self.cfg['additional_envs'][env_name]
+            value = env['value']
+
+            if env['resolve']:
+                value = str(Path(value).expanduser().resolve())
+
+            if env_name not in os.environ or env['type'] == 'overwrite':
+                os.environ[env_name] = value
+            elif env['type'] == 'append':
+                os.environ[env_name] = os.environ[env_name] + ':' + value
 
 def check(cfg_file_path):
     cfg = Config(cfg_file_path)
