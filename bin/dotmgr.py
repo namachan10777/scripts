@@ -17,16 +17,23 @@ def get_root_of_cfg(cfg_file_path_string):
 def parse_cfg_file(cfg_file):
     return json.loads(cfg_file.read())
 
+def read_json(path):
+    path_normalized = normalize_path(path)
+    try:
+        f = open(path_normalized, 'r')
+        return (json.loads(f.read()), path_normalized)
+        raise DotMgrError(f'File Not found {path}')
+    except json.decoder.JSONDecodeError:
+        raise DotMgrError(f'{path} is not a JSON')
+
+class Pkg:
+    def __init__(self, pkg_file_path):
+        self.cfg, _ = read_json(pkg_file_path / 'pkg.json')
+
 class Config:
     def __init__(self, cfg_file_path):
-        path_normalized = normalize_path(cfg_file_path)
-        try:
-            f = open(path_normalized, 'r')
-            self.cfg = json.loads(f.read())
-        except FileNotFoundError as e:
-            raise DotMgrError(f'File Not found {cfg_file_path}')
-        except json.decoder.JSONDecodeError as e:
-            raise DotMgrError(f'{cfg_file_path} is not a JSON')
+        self.cfg, json_path = read_json(cfg_file_path)
+        self.parent = json_path.parent
 
     def configure_envs(self):
         for env_name in self.cfg['additional_envs'].keys():
@@ -41,8 +48,15 @@ class Config:
             elif env['type'] == 'append':
                 os.environ[env_name] = os.environ[env_name] + ':' + value
 
+    def load_pkgs(self):
+        pkgs = []
+        for entry in (self.parent / self.cfg['pkgs']).glob('*'):
+            pkgs.append(Pkg(entry))
+
 def check(cfg_file_path):
     cfg = Config(cfg_file_path)
+    cfg.configure_envs()
+    cfg.load_pkgs()
 
 def deploy(cfg_file_path):
     cfg = Config(cfg_file_path)
