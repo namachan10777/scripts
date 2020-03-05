@@ -5,8 +5,14 @@ import json
 from pathlib import Path
 import os
 
-def get_root_of_cfg(cfg_file):
-    return Path(cfg_file.name).expanduser().resolve().parent
+class DotMgrError(Exception):
+    pass
+
+def normalize_path(path_string):
+    return Path(os.path.expandvars(path_string)).expanduser().resolve()
+
+def get_root_of_cfg(cfg_file_path_string):
+    return normalize_path(cfg_file_path_string).parent
 
 def parse_cfg_file(cfg_file):
     return json.loads(cfg_file.read())
@@ -24,22 +30,37 @@ def configure_envs(cfg):
         elif env['type'] == 'append':
             os.environ[env_name] = os.environ[env_name] + ':' + value
 
+class Config:
+    def __init__(self, cfg_file_path):
+        path_normalized = normalize_path(cfg_file_path)
+        try:
+            f = open(path_normalized, 'r')
+            cfg_json = json.loads(f.read())
+        except FileNotFoundError as e:
+            raise DotMgrError(f'File Not found {cfg_file_path}')
+        except json.decoder.JSONDecodeError as e:
+            raise DotMgrError(f'{cfg_file_path} is not a JSON')
 
-def check(cfg_file):
-    configure_envs(parse_cfg_file(cfg_file))
-    print(get_root_of_cfg(cfg_file))
 
-def deploy(cfg_file):
-    print(get_root_of_cfg(cfg_file))
+def check(cfg_file_path):
+    cfg = Config(cfg_file_path)
+
+def deploy(cfg_file_path):
+    cfg = Config(cfg_file_path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c',  '--check', help='check' , type=open)
-    parser.add_argument('-d', '--deploy', help='deploy', type=open)
+    parser.add_argument('-c',  '--check', help='check' )
+    parser.add_argument('-d', '--deploy', help='deploy')
     args = parser.parse_args()
-    if args.check is not None:
-        check(args.check)
-    elif args.deploy is not None:
-        deploy(args.deploy)
-    else:
-        parser.print_help()
+    try:
+        if args.check is not None:
+            check(args.check)
+        elif args.deploy is not None:
+            deploy(args.deploy)
+        else:
+            parser.print_help()
+    except DotMgrError as e:
+        print(e)
+        exit(1)
+    exit(0)
