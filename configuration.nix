@@ -5,23 +5,22 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      <nixos-hardware/lenovo/thinkpad/x280>
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    <nixos-hardware/lenovo/thinkpad/x280>
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   networking.networkmanager.enable = true;
-# networking.hostName = "nixos"; # Define your hostname.
+  # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
- 
- # replicates the default behaviour.
+
+  # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp0s31f6.useDHCP = true;
   networking.interfaces.wlp59s0.useDHCP = true;
@@ -50,15 +49,9 @@
       pkgs.nerdfonts
     ];
     fontconfig.defaultFonts = {
-      serif = [
-        "IPAPMincho"
-      ];
-      sansSerif = [
-        "IPAGothic"
-      ];
-      monospace = [
-        "DejaVu Sans Mono"
-      ];
+      serif = [ "IPAPMincho" ];
+      sansSerif = [ "IPAGothic" ];
+      monospace = [ "DejaVu Sans Mono" ];
     };
   };
 
@@ -68,7 +61,19 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget neovim firefox fish alacritty stack pavucontrol networkmanager rofi picom exa lazygit xsel
+    wget
+    neovim
+    firefox
+    fish
+    alacritty
+    stack
+    pavucontrol
+    networkmanager
+    rofi
+    picom
+    exa
+    lazygit
+    xsel
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -222,7 +227,8 @@
     isNormalUser = true;
     home = "/home/namachan";
     description = "Masaki Nakano";
-    extraGroups = [ "wheel" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups =
+      [ "wheel" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
   hardware.pulseaudio.enable = true;
 
