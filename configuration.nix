@@ -74,6 +74,9 @@
     exa
     lazygit
     xsel
+    gnumake
+    gcc
+    m4
   ];
   nixpkgs.config.allowUnfree = true;
 
