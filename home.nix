@@ -3,6 +3,45 @@
   services.polybar = {
     enable = true;
     script = "polybar example &";
+    package = pkgs.stdenv.mkDerivation rec {
+      pname = "polybar";
+      version = "3.4.3";
+
+      src = pkgs.fetchFromGitHub {
+        owner = pname;
+        repo = pname;
+        rev = version;
+        sha256 = "0fsfh3xv0c0hz10xqzvd01c0p0wvzcnanbyczi45zhaxfrisb39w";
+        fetchSubmodules = true;
+      };
+
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://polybar.github.io/";
+        description = "A fast and easy-to-use tool for creating status bars";
+        longDescription = ''
+          Polybar aims to help users build beautiful and highly customizable
+          status bars for their desktop environment, without the need of
+          having a black belt in shell scripting.
+        '';
+        license = licenses.mit;
+        maintainers = with maintainers; [ afldcr filalex77 ];
+        platforms = platforms.linux;
+      };
+
+      buildInputs = [
+        pkgs.cairo pkgs.xorg.libXdmcp pkgs.xorg.libpthreadstubs pkgs.xorg.libxcb pkgs.pcre pkgs.python3 pkgs.xorg.xcbproto pkgs.xorg.xcbutil
+        pkgs.xorg.xcbutilcursor pkgs.xorg.xcbutilimage pkgs.xorg.xcbutilrenderutil pkgs.xorg.xcbutilwm pkgs.xcbutilxrm
+        pkgs.libpulseaudio
+        pkgs.coreutils
+      ];
+
+      nativeBuildInputs = [
+        pkgs.cmake pkgs.pkgconfig pkgs.removeReferencesTo
+      ];
+      postFixup = ''
+          remove-references-to -t ${pkgs.stdenv.cc} $out/bin/polybar
+      '';
+    };
     extraConfig = ''
       [colors]
       ;background = ''${xrdb:color0:#222}
