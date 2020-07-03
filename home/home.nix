@@ -1,11 +1,10 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   services.polybar = {
     enable = true;
     script = "polybar example &";
     package = pkgs.stdenv.mkDerivation rec {
       pname = "polybar";
-      version = "3.4.3";
+      version = "3.4.2";
 
       src = pkgs.fetchFromGitHub {
         owner = pname;
@@ -29,17 +28,37 @@
       };
 
       buildInputs = [
-        pkgs.cairo pkgs.xorg.libXdmcp pkgs.xorg.libpthreadstubs pkgs.xorg.libxcb pkgs.pcre pkgs.python3 pkgs.xorg.xcbproto pkgs.xorg.xcbutil
-        pkgs.xorg.xcbutilcursor pkgs.xorg.xcbutilimage pkgs.xorg.xcbutilrenderutil pkgs.xorg.xcbutilwm pkgs.xcbutilxrm
+        pkgs.cairo
+        pkgs.xorg.libXdmcp
+        pkgs.xorg.libpthreadstubs
+        pkgs.xorg.libxcb
+        pkgs.pcre
+        pkgs.python3
+        pkgs.xorg.xcbproto
+        pkgs.xorg.xcbutil
+        pkgs.xorg.xcbutilcursor
+        pkgs.xorg.xcbutilimage
+        pkgs.xorg.xcbutilrenderutil
+        pkgs.xorg.xcbutilwm
+        pkgs.xcbutilxrm
         pkgs.libpulseaudio
-        pkgs.coreutils
+        pkgs.ipafont
+        pkgs.hack-font
+        pkgs.siji
+        pkgs.fixedsys-excelsior
+        pkgs.unifont
+        pkgs.iosevka
+        pkgs.nerdfonts
       ];
 
       nativeBuildInputs = [
-        pkgs.cmake pkgs.pkgconfig pkgs.removeReferencesTo
+        pkgs.cmake
+        pkgs.pkgconfig
+        pkgs.removeReferencesTo
+        pkgs.coreutils
       ];
       postFixup = ''
-          remove-references-to -t ${pkgs.stdenv.cc} $out/bin/polybar
+        remove-references-to -t ${pkgs.stdenv.cc} $out/bin/polybar
       '';
     };
     extraConfig = builtins.readFile ./config/polybar_config;
@@ -77,7 +96,7 @@
           rev = "2cded48477a5e308c77a0d289cc9b540669b701f";
           sha256 = "1g6ykdh7d16q6nvpvmxx4ss8w7cisx5r8qmbrrvhpwmbb3894pxp";
         };
-        dependencies = [];
+        dependencies = [ ];
       })
     ];
     extraConfig = builtins.readFile ./config/init.vim;

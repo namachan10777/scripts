@@ -45,7 +45,6 @@
       pkgs.siji
       pkgs.fixedsys-excelsior
       pkgs.unifont
-      pkgs.iosevka
       pkgs.nerdfonts
     ];
     fontconfig.defaultFonts = {
