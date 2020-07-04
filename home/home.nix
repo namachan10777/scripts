@@ -101,6 +101,24 @@
         };
         dependencies = [ ];
       })
+      (pkgs.vimUtils.buildVimPluginFrom2Nix {
+        name = "vim-quickhl-2020-07-04";
+        src = pkgs.fetchgit {
+          url = "https://github.com/t9md/vim-quickhl";
+          rev = "9df53aacbff2709049b787109102b45163190c82";
+          sha256 = "0kl91nxlgdhjv32ghnzbiwkhsy5dbrv0p7m126l51xhnkmz24n0g";
+        };
+        dependencies = [ ];
+      })
+      (pkgs.vimUtils.buildVimPluginFrom2Nix {
+        name = "vim-papercolor-2020-07-04";
+        src = pkgs.fetchgit {
+          url = "https://github.com/NLKNguyen/papercolor-theme";
+          rev = "c657f5c2d5964bbae633f8a42c16f8316f6d6733";
+          sha256 = "1vv1gd64isrgyxc4fyp5mzlhffwkzdc8agnv0aka4v7qdaca45ni";
+        };
+        dependencies = [ ];
+      })
     ];
     extraConfig = builtins.readFile ./config/init.vim;
   };

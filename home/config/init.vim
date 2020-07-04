@@ -336,13 +336,15 @@ set clipboard+=unnamed
 " 以下カラースキーム設定
 set background=dark
 let g:artesanal_transp_bg = 0
-colorscheme koehler
+colorscheme PaperColor
 
 " 透過関連
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight SpecialKey ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
+highlight Folded ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
+highlight Scrollbar ctermbg=NONE guibg=NONE
 highlight CocUnderline ctermbg=Red cterm=underline
 endfunction
