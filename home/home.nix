@@ -27,6 +27,10 @@
         platforms = platforms.linux;
       };
 
+      depsTargetTarget = [
+        pkgs.coreutils
+      ];
+
       buildInputs = [
         pkgs.cairo
         pkgs.xorg.libXdmcp
@@ -55,7 +59,6 @@
         pkgs.cmake
         pkgs.pkgconfig
         pkgs.removeReferencesTo
-        pkgs.coreutils
       ];
       postFixup = ''
         remove-references-to -t ${pkgs.stdenv.cc} $out/bin/polybar
