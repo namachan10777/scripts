@@ -82,6 +82,7 @@ myStartupHook = do
     spawn "polybar example"
     spawn "slack"
     spawn "light-locker"
+    spawn "thunderbird"
     spawn "xautolock -time 1 -locker \"light-locker-command -l\" -notify 10 -notifier \"notify-send -t 5000 -i gtk-dialog-info 'Locking in 10 seconds'"
 
 myModMask = mod4Mask -- Superkey
